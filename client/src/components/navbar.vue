@@ -83,7 +83,7 @@ export default {
   methods: {
     questionMethod: async function () {
       try {
-        if (!this.question.title || !this.question.description) {
+        if (!this.question.title || !this.question.description || !this.question.tag) {
           swal('Invalid', 'all field is required', 'error')
         } else {
           await db.collection('question').add({
