@@ -11,13 +11,6 @@ const admin = require('firebase-admin')
 
 var serviceAccount = require('./serviceAccountKey.json');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://overflow-545e7.firebaseio.com"
-});
-
-const db = admin.firestore()
-
 let sendMail = async (data, done) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -49,11 +42,6 @@ queue.process('weekly', (job, done) => {
 })
 
 module.exports = {
-  hash: (password) => {
-    let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(password, salt);
-    return hash;
-  },
   compare: (input, password) => {
     return bcrypt.compareSync(input, password);
   },
@@ -65,6 +53,13 @@ module.exports = {
   },
   cronJob: async () => {
     try {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://overflow-545e7.firebaseio.com"
+      });
+      
+      const db = admin.firestore()
+
       const users = await User.find()
       users.forEach( async (e) => {
         let { docs } = db.collection('answer').where('owner', '==', e.email).get();

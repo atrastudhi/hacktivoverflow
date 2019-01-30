@@ -43,12 +43,14 @@ module.exports = {
         email,
         password
       })
+      console.log('masokkk =============')
       queue.create('email', {
         title: 'welcoming email from hacvtivoverflow',
         to: email
       }).save()
       res.status(201).json(user)
     } catch (err) {
+      console.log(err)
       res.status(500).json({
         errors: err
       })

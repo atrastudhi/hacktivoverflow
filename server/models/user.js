@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const { hash } = require('../helpers/helper')
+const hash = require('../helpers/hash')
 
 const userSchema = new Schema ({
   email: {
@@ -28,6 +28,7 @@ const userSchema = new Schema ({
 });
 
 userSchema.pre('save', function (next) {
+  // console.log(helpers)
   this.password = hash(this.password)
   next()
 })
